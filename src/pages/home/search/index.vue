@@ -12,6 +12,11 @@
 <script lang='ts' setup>
 import { reqHospitalInfo } from '@/api/home';
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
+//创建路由对象
+var router = useRouter();
+
 defineOptions({
     name: 'search'
 })
@@ -33,7 +38,10 @@ const fetchData = async (keyword: string, cb: any) => {
     cb(showData)
 }
 
-const handleSelect = async () => {
+const handleSelect = async (item: any) => {
+    router.push({
+        path: '/hospital'
+    })
 
 }
 

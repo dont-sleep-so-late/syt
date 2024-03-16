@@ -48,5 +48,5 @@ var $emit = defineEmits(['getLevel'])
 </script>
 
 <style lang='scss' scoped>
-@import "../../style/home/choose"
+@import "@/style/home/choose"
 </style>

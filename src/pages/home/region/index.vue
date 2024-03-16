@@ -47,5 +47,5 @@ var $emit = defineEmits(['getRegion'])
 </script>
 
 <style lang='scss' scoped>
-@import "../../style/home/choose"
+@import "@/style/home/choose"
 </style>

@@ -23,11 +23,12 @@
 </template>
 
 <script lang='ts' setup>
-import Carousel from '@/components/carousel/index.vue'
-import Search from '@/components/search/index.vue'
-import Level from '@/components/level/index.vue'
-import Region from '@/components/region/index.vue'
-import Card from '@/components/card/index.vue'
+import Carousel from '@/pages/home/carousel/index.vue' //轮播图
+import Search from '@/pages/home/search/index.vue'  //搜索组件
+import Level from '@/pages/home/level/index.vue'  //等级组件
+import Region from '@/pages/home/region/index.vue' //地区组件
+import Card from '@/pages/home/card/index.vue' //卡片组件
+import Tip from '@/pages/home/tip/index.vue' //卡片组件
 
 import { onMounted, ref } from "vue";
 import { resHospital } from "@/api/home/index";

@@ -2,9 +2,8 @@
     <div class="top">
         <div class="content">
             <!-- 左侧 -->
-            <div class="left">
+            <div class="left" @click="goHome">
                 <img src="@/assets/logo.png" alt="">
-                <p>医通 预约挂号统一平台</p>
             </div>
             <div class="right">
                 <p class="help">帮助中心</p>
@@ -15,7 +14,14 @@
 </template>
 
 <script lang='ts' setup>
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
+const goHome = () => {
+    router.push({
+        path: '/home'
+    })
+}
 </script>
 
 <style lang='scss' scoped>
@@ -40,15 +46,11 @@
             align-items: center;
 
             img {
-                width: 50px;
-                height: 50px;
+                width: 100%;
+                height: 70px;
                 margin-right: 10px;
             }
 
-            p {
-                font-size: 20px;
-                color: #55a6fe;
-            }
         }
 
         .right {
@@ -60,6 +62,10 @@
 
             .help {
                 margin-right: 10px;
+            }
+
+            p {
+                cursor: pointer;
             }
         }
     }

@@ -23,7 +23,6 @@ export default defineConfig({
       '/api': {
         target: 'http://syt.atguigu.cn',
         changeOrigin: true,
-
       }
     }
   }

@@ -10,7 +10,6 @@ import 'element-plus/dist/index.css'
 //引入国际化
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
-
 // 引入icon
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
