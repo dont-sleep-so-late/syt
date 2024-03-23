@@ -61,8 +61,16 @@ const goDetail = () => {
     display: flex;
     justify-content: space-between;
 
+
+
     .left {
         width: 60%;
+
+        .hospital_name {
+            h2 {
+                font-weight: 400;
+            }
+        }
 
         .tip {
             color: #7f7f7f7f;
@@ -88,5 +96,8 @@ const goDetail = () => {
         }
     }
 
+    &:hover {
+        cursor: pointer;
+    }
 }
 </style>

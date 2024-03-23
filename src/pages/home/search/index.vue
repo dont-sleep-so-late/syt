@@ -54,7 +54,7 @@ const handleSelect = async (item: any) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0;
+    margin: 50px 0;
 
     ////深度选择器: >>>    /deep/   ::v-deep
     // ::v-deep .el-input__wrapper {

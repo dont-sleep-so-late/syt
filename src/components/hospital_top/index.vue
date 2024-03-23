@@ -33,6 +33,7 @@ const goHome = () => {
     background-color: #fff;
     display: flex;
     justify-content: center;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .1);
 
     .content {
         width: 1200px;

@@ -17,7 +17,9 @@
                 </div>
                 <el-empty v-else description="暂无数据" />
             </el-col>
-            <el-col :span="4">456</el-col>
+            <el-col :span="4">
+                <Tip />
+            </el-col>
         </el-row>
     </div>
 </template>
