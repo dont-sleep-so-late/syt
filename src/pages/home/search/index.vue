@@ -39,8 +39,14 @@ const fetchData = async (keyword: string, cb: any) => {
 }
 
 const handleSelect = async (item: any) => {
+    console.log(item);
+
     router.push({
-        path: '/hospital'
+        path: '/hospital/register',
+        query: {
+            hosname: item.value,
+            hoscode: item.hoscode,
+        }
     })
 
 }

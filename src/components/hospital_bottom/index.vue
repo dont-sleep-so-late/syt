@@ -29,7 +29,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-
+    
     .content {
         width: 1200px;
         height: 100%;

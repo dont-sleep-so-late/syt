@@ -45,7 +45,7 @@ const router = useRouter()
 
 const goDetail = () => {
     router.push({
-        path: '/hospital',
+        path: '/hospital/register',
         query: {
             hosname: props.hospitalInfo.hosname,
             hoscode: props.hospitalInfo.hoscode,

@@ -36,6 +36,7 @@ import { onMounted, ref } from "vue";
 import { resHospital } from "@/api/home/index";
 import { Content, HospitalResponseData } from '@/api/home/type'
 
+
 //分页器需要的数据
 //分页器页码
 var pageNum = ref<number>(1)

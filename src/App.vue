@@ -24,6 +24,7 @@
 
   .content {
     width: 1200px;
+    min-height: 700px;
     margin-top: 70px;
   }
 

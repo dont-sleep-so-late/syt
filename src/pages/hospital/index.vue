@@ -1,17 +1,59 @@
 <template>
-    <div>我是医院</div>
+    <div class="hospital">
+        <!-- 左侧导航 -->
+        <div class="menu">
+            <el-menu :default-active="route.path" router>
+                <el-menu-item index="/hospital/register">
+                    <span>预约挂号</span>
+                </el-menu-item>
+                <el-menu-item index="/hospital/detail">
+                    <span>医院详情</span>
+                </el-menu-item>
+                <el-menu-item index="/hospital/notice">
+                    <span>预约须知</span>
+                </el-menu-item>
+                <el-menu-item index="/hospital/close">
+                    <span>停诊信息</span>
+                </el-menu-item>
+                <el-menu-item index="/hospital/search">
+                    <span>查询/取消</span>
+                </el-menu-item>
+            </el-menu>
+        </div>
+        <!-- 右侧内容 -->
+        <div class="content">
+            <router-view></router-view>
+        </div>
+    </div>
 </template>
 
 <script lang='ts' setup>
 import { onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
-const router = useRouter()
+import useDetailStore from '@/store/modules/hospitalDetail'
+
+var detailStore = useDetailStore()
+
+const route = useRoute()
 
 onMounted(() => {
-    console.log(router.addRoute);
-}),
+    detailStore.getHospital(route.query.hoscode);
+})
 
 </script>
 
-<style lang='scss' scoped></style>
+<style lang='scss' scoped>
+.hospital {
+    display: flex;
+    margin-top: 20px;
+
+    .menu {
+        flex: 2;
+    }
+
+    .content {
+        flex: 8;
+    }
+}
+</style>
