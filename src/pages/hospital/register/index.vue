@@ -63,8 +63,8 @@
                     :key="department.depcode">
                     <h1 class="cur">{{ department.depname }}</h1>
                     <ul>
-                        <li class="departmentContent" v-for="(departmentChild, index) in department.children"
-                            :key="departmentChild.depcode">
+                        <li @click="toDepartment()" class="departmentContent"
+                            v-for="(departmentChild, index) in department.children" :key="departmentChild.depcode">
                             {{ departmentChild.depname }}
                         </li>
                     </ul>
@@ -76,9 +76,11 @@
 
 <script lang='ts' setup>
 import useDetailStore from '@/store/modules/hospitalDetail'
+import useUserStore from '@/store/modules/user'
 import { ref } from 'vue';
 
-const hospitalStore = useDetailStore()
+var userStore = useUserStore()
+var hospitalStore = useDetailStore()
 
 var currentIndex = ref<number>(0)
 
@@ -88,9 +90,12 @@ const changeDepartment = (index: number) => {
     let allH1 = document.querySelectorAll('.cur')
 
     allH1[index].scrollIntoView({
-        behavior:'smooth',
+        behavior: 'smooth',
     })
 
+}
+const toDepartment = () => {
+    userStore.visiable = true;
 }
 </script>
 
