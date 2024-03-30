@@ -19,6 +19,7 @@ import App from "./App.vue";
 
 import HospitalTop from "@/components/hospital_top/index.vue";
 import HospitalBottom from "@/components/hospital_bottom/index.vue";
+import Login from "@/components/login/index.vue";
 
 //引入vue-router
 import router from "@/router";
@@ -30,6 +31,7 @@ const app = createApp(App);
 
 app.component("HospitalTop", HospitalTop);
 app.component("HospitalBottom", HospitalBottom);
+app.component("Login", Login);
 
 //安装element-plus插件
 //安装中文

@@ -24,11 +24,51 @@
             <div class="left">
                 <div class="logo">
                     <el-avatar :size="80"
-                        :src="`data:image/jpeg;base64,${hospitalStore.hospitalInfo?.hospital.logoData}`" />
+                        :src="`data:image/jpeg;base64,${hospitalStore.hospitalInfo?.hospital?.logoData}`" />
                 </div>
             </div>
             <div class="right">
-                {{ }}
+                <div>
+                    <h2>挂号规则</h2>
+                </div>
+                <div class="time">
+                    <p>预约周期:{{ hospitalStore.hospitalInfo.bookingRule?.cycle }}天</p>
+                    <p>放号时间:{{ hospitalStore.hospitalInfo.bookingRule?.releaseTime }}</p>
+                    <p>停挂时间:{{ hospitalStore.hospitalInfo.bookingRule?.stopTime }}</p>
+                </div>
+                <div class="address">
+                    <p>具体地址:{{ hospitalStore.hospitalInfo.hospital?.param?.fullAddress }}</p>
+                    <p>规划路线:{{ hospitalStore.hospitalInfo.hospital?.route }}</p>
+                    <p>退号时间:就诊前一工作日{{ hospitalStore.hospitalInfo.bookingRule?.stopTime }}前取消</p>
+                </div>
+                <div class="rules">
+                    <h2>医院取消规则</h2>
+                    <p v-for="item in hospitalStore.hospitalInfo.bookingRule?.rule" key="index">
+                        {{ item }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="department">
+            <div class="leftNav">
+                <ul>
+                    <li @click="changeDepartment(index)" :class="{ active: index == currentIndex }"
+                        v-for="(department, index) in hospitalStore.department" :key="department.depcode">{{
+                    department.depname
+                }}</li>
+                </ul>
+            </div>
+            <div class="rightContent">
+                <div class="showDepartment" v-for="(department, index) in hospitalStore.department"
+                    :key="department.depcode">
+                    <h1 class="cur">{{ department.depname }}</h1>
+                    <ul>
+                        <li class="departmentContent" v-for="(departmentChild, index) in department.children"
+                            :key="departmentChild.depcode">
+                            {{ departmentChild.depname }}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -36,11 +76,22 @@
 
 <script lang='ts' setup>
 import useDetailStore from '@/store/modules/hospitalDetail'
-import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 const hospitalStore = useDetailStore()
 
+var currentIndex = ref<number>(0)
 
+const changeDepartment = (index: number) => {
+    currentIndex.value = index;
+
+    let allH1 = document.querySelectorAll('.cur')
+
+    allH1[index].scrollIntoView({
+        behavior:'smooth',
+    })
+
+}
 </script>
 
 <style lang='scss' scoped>
@@ -71,7 +122,86 @@ const hospitalStore = useDetailStore()
         padding: 20px 30px;
 
         .left {
-            width: 40px;
+            width: 200px;
+        }
+
+        .right {
+
+            .time {
+                display: flex;
+
+
+            }
+
+            p {
+                line-height: 22px;
+                font-size: 16px;
+            }
+        }
+    }
+
+    .department {
+        display: flex;
+        height: 60vh;
+
+        .leftNav {
+            flex: 1;
+
+            li {
+                background-color: rgb(250, 250, 250);
+                cursor: pointer;
+                text-align: center;
+                font-size: 14px;
+                padding: 10px 10px;
+                width: 100%;
+                height: 100%;
+
+                &:hover {
+                    background-color: #fff;
+                }
+
+                &.active {
+                    border-left: 1px solid red;
+                    background-color: #fff;
+                    color: red;
+                }
+            }
+        }
+
+
+        .rightContent {
+            flex: 9;
+            overflow: scroll;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .showDepartment {
+
+                h1 {
+                    font-size: 14px;
+                    background-color: rgb(250, 250, 250);
+                    color: #7f7f7f;
+                }
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    li {
+                        width: 33.3%;
+                        padding: 10px 20px;
+                        color: #7f7f7f;
+                        font-size: 14px;
+
+                        &:hover {
+                            cursor: pointer;
+                            color: red;
+                        }
+                    }
+                }
+            }
         }
     }
 }

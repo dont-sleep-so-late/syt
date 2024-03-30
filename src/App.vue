@@ -9,6 +9,7 @@
     </div>
     <!-- 底部全局组件 -->
     <HospitalBottom />
+    <Login />
   </div>
 </template>
 
@@ -21,10 +22,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  min-width: 1200px;
 
   .content {
     width: 1200px;
-    min-height: 700px;
+    min-height: calc(100vh - 120px);
     margin-top: 70px;
   }
 

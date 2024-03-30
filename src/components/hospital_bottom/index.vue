@@ -23,13 +23,13 @@
 <style lang='scss' scoped>
 .bottom {
     z-index: 999;
-    width: 100%;
-    height: 70px;
-    background-color: #fff;
+    width: 100%;    
+    height: 50px;
+    background: #fafafa;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    
+
     .content {
         width: 1200px;
         height: 100%;

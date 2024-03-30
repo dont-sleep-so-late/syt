@@ -43,3 +43,23 @@ interface BookingRule {
   quitTime: string;
   rule: string[];
 }
+
+//科室类型
+export interface HospitalDepartmentResponseData {
+  code: number;
+  message: string;
+  data: DepartmentData;
+  ok: boolean;
+}
+
+export interface DepartmentData {
+  depcode: string;
+  depname: string;
+  children: Child;
+}
+
+interface Child {
+  depcode: string;
+  depname: string;
+  children?: any;
+}

@@ -2,7 +2,7 @@
     <div class="hospital">
         <!-- 左侧导航 -->
         <div class="menu">
-            <el-menu :default-active="route.path" router>
+            <el-menu :default-active="route.path" @select="changeRouter">
                 <el-menu-item index="/hospital/register">
                     <span>预约挂号</span>
                 </el-menu-item>
@@ -36,11 +36,22 @@ import useDetailStore from '@/store/modules/hospitalDetail'
 var detailStore = useDetailStore()
 
 const route = useRoute()
+const router = useRouter()
 
 onMounted(() => {
     detailStore.getHospital(route.query.hoscode);
+    detailStore.getDepartment(route.query.hoscode);
 })
 
+
+const changeRouter = (index: string) => {
+    router.push({
+        path: index,
+        query: {
+            hoscode: route.query.hoscode
+        }
+    })
+}
 </script>
 
 <style lang='scss' scoped>
@@ -49,11 +60,12 @@ onMounted(() => {
     margin-top: 20px;
 
     .menu {
-        flex: 2;
+        flex: 1.5;
     }
 
     .content {
-        flex: 8;
+        flex: 8.5;
     }
+
 }
 </style>

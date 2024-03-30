@@ -4,6 +4,10 @@
             <!-- 左侧 -->
             <div class="left" @click="goHome">
                 <img src="@/assets/logo.png" alt="">
+                <div class="title">
+                    <h2>一医通</h2>
+                    <p>卫育委员会预约挂号统一平台</p>
+                </div>
             </div>
             <div class="right">
                 <p class="help">帮助中心</p>
@@ -46,9 +50,13 @@ const goHome = () => {
             justify-content: center;
             align-items: center;
 
+            &:hover {
+                cursor: pointer;
+            }
+
             img {
-                width: 100%;
-                height: 70px;
+                width: 60px;
+                height: 60px;
                 margin-right: 10px;
             }
 
