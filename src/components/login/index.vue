@@ -6,22 +6,28 @@
                 <el-col :span="12">
                     <div class="login">
                         <div v-show="scene == 0">
-                            <el-form>
+                            <el-form :model="loginData" :rules="rules" ref="ruleFormRef">
                                 <el-form-item>
                                     <h3>手机号码</h3>
-                                    <el-input :prefix-icon="User" placeholder="请输入手机号码"></el-input>
+                                    <el-input :prefix-icon="User" prop="phone" placeholder="请输入手机号码"
+                                        v-model="loginData.phone"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <h3>验证码</h3>
-                                    <el-input :prefix-icon="Lock" placeholder="请输入验证码"></el-input>
+                                    <el-input :prefix-icon="Lock" prop="code" placeholder="请输入验证码"
+                                        v-model="loginData.code"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button style="width: 50%;" size="default" @click="" disabled>获取验证码</el-button>
+                                    <el-button style="width: 50%;" size="default" @click="getCode"
+                                        :disabled="!isPhone || flag">
+                                        <span v-if="!flag">获取验证码</span>
+                                        <CountDown v-else @getFlag="getFlag" :flag="flag" />
+                                    </el-button>
                                 </el-form-item>
                             </el-form>
                             <div class="bottom">
                                 <el-button style="width: 100%;" type="primary" size="default" @click=""
-                                    disabled>用户登录</el-button>
+                                    :disabled="!isPhone">用户登录</el-button>
                                 <div class="wxLogin" @click="wxLogin(1)">
                                     <p>微信扫码登陆</p>
                                     <svg t="1711849647975" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -105,17 +111,65 @@
 <script lang='ts' setup>
 import useUserStore from '@/store/modules/user'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ref } from 'vue';
-
+import type { FormInstance, FormRules } from 'element-plus';
+import { ref, reactive, computed } from 'vue';
+import { loginData } from '@/api/hospital/type'
+//引入倒计时组件
+import CountDown from '@/components/countdown/index.vue'
 var userStore = useUserStore()
+
+var flag = ref<boolean>(false)
 
 //登录场景 0代表验证码登录 1代表微信扫码登录
 var scene = ref<number>(0)
+//收集表单数据--手机号码
+var loginData = reactive<loginData>({
+    phone: '',
+    code: ''
+})
+const ruleFormRef = ref<FormInstance>()
 
+//判断手机号
+var isPhone = computed(() => {
+    const reg = /^(13[0-9]|14|15[0-35-9]|16|17[0-8]|18[0-9]|19)\d{8}$/
+    return reg.test(loginData.phone)
+})
+const getCode = () => {
+    flag.value = true;
+    try {
+        //获取验证码成功
+        userStore.getCode(loginData.phone);
+        setTimeout(() => {
+            loginData.code = userStore.code;
+        }, 500);
+
+    } catch (error) {
+        //获取验证码失败
+
+    }
+}
+
+const getFlag = (value: boolean) => {
+    console.log(value);
+
+    flag.value = value
+}
 const wxLogin = (value: number) => {
     scene.value = value
 }
 
+const rules = reactive<FormRules<loginData>>({
+    phone: [
+        { required: true, message: '请输入正确的手机号', trigger: 'change' },
+    ],
+    code: [
+        {
+            required: true,
+            message: '请输入验证码',
+            trigger: 'change',
+        },
+    ],
+})
 </script>
 
 <style lang='scss' scoped>

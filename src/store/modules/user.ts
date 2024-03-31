@@ -1,12 +1,25 @@
 import { defineStore } from "pinia";
 
+import { reqCode } from "@/api/hospital";
+
 const useUserStore = defineStore("User", {
   state: () => {
     return {
       visiable: false,
+      code: "",
     };
   },
-  actions: {},
+  actions: {
+    async getCode(phone: string) {
+      var result: any = await reqCode(phone);
+      if (result.code == 200) {
+        this.code = result.data;
+        return "ok";
+      } else {
+        return Promise.reject(new Error(result.message));
+      }
+    },
+  },
   getters: {},
 });
 

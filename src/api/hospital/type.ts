@@ -63,3 +63,15 @@ interface Child {
   depname: string;
   children?: any;
 }
+
+export interface PhoneData {
+  code: number;
+  message: string;
+  data: string;
+  ok: boolean;
+}
+
+export interface loginData {
+  phone: string;
+  code: number;
+}

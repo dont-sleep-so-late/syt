@@ -3,6 +3,7 @@ import request from "@/utils/request"; //通过枚举管理首页模块的接口
 import type {
   HospitalResponseData,
   HospitalDepartmentResponseData,
+  PhoneData,
 } from "./type";
 
 enum API {
@@ -10,6 +11,8 @@ enum API {
   HOSPITAL_URL = "/hosp/hospital/",
   //获取某一个医院的科室的数据
   HOSPITALDEPARMENT_URL = "/hosp/hospital/department/",
+  //获取验证码接口
+  GETUSERCOD_URL = "/sms/send/",
 }
 //获取医院的数据
 export const resHospitalDetail = (hoscode: string) =>
@@ -19,6 +22,6 @@ export const resDepartment = (hoscode: string) =>
   request.get<any, HospitalDepartmentResponseData>(
     API.HOSPITALDEPARMENT_URL + `${hoscode}`
   );
-// //通过搜索关键字获取医院的数据
-// export const reqHospitalInfo = (hosname: string) =>
-//   request.get<any, HospitalInfo>(API.HOSPITALINFO_URL + hosname);
+//通过搜索关键字获取医院的数据
+export const reqCode = (phone: string) =>
+  request.get<any, PhoneData>(API.GETUSERCOD_URL + phone);
