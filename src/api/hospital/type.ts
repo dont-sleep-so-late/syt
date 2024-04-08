@@ -70,8 +70,3 @@ export interface PhoneData {
   data: string;
   ok: boolean;
 }
-
-export interface loginData {
-  phone: string;
-  code: number;
-}

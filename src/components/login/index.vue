@@ -26,8 +26,8 @@
                                 </el-form-item>
                             </el-form>
                             <div class="bottom">
-                                <el-button style="width: 100%;" type="primary" size="default" @click=""
-                                    :disabled="!isPhone">用户登录</el-button>
+                                <el-button style="width: 100%;" type="primary" size="default" @click="login"
+                                    :disabled="!isPhone || loginData.code.length < 6 ? true : false">用户登录</el-button>
                                 <div class="wxLogin" @click="wxLogin(1)">
                                     <p>微信扫码登陆</p>
                                     <svg t="1711849647975" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -111,9 +111,9 @@
 <script lang='ts' setup>
 import useUserStore from '@/store/modules/user'
 import { User, Lock } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { ref, reactive, computed } from 'vue';
-import { loginData } from '@/api/hospital/type'
+import { loginData } from '@/api/user/type'
 //引入倒计时组件
 import CountDown from '@/components/countdown/index.vue'
 var userStore = useUserStore()
@@ -145,10 +145,30 @@ const getCode = () => {
 
     } catch (error) {
         //获取验证码失败
-
+        ElMessage({
+            type: 'error',
+            message: (error as Error).message
+        })
     }
 }
-
+//登录
+const login = async () => {
+    //发起登录请求
+    //登录请求成功:顶部组件需要展示用户名字、对话框关闭
+    //登录请求失败:弹出对应登录失败的错误信息
+    await userStore.userLogin(loginData).then(() => {
+        userStore.visiable = false;
+        ElMessage({
+            type: 'success',
+            message: '登陆成功'
+        })
+    }, (error) => {
+        ElMessage({
+            type: 'error',
+            message: (error as Error).message
+        })
+    })
+}
 const getFlag = (value: boolean) => {
     console.log(value);
 

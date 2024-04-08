@@ -3,7 +3,7 @@
         <div class="content">
             <!-- 左侧 -->
             <div class="left">
-                <p>京ICP备13018369号 </p>
+                <!-- <p>京ICP备13018369号 </p> -->
                 <p>电话挂号010-56253825</p>
             </div>
             <div class="right">

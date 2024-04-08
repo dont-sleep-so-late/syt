@@ -13,6 +13,7 @@ enum API {
   HOSPITALDEPARMENT_URL = "/hosp/hospital/department/",
   //获取验证码接口
   GETUSERCOD_URL = "/sms/send/",
+
 }
 //获取医院的数据
 export const resHospitalDetail = (hoscode: string) =>

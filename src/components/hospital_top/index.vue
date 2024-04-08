@@ -11,7 +11,23 @@
             </div>
             <div class="right">
                 <p class="help">帮助中心</p>
-                <p @click="login">注册/登录</p>
+                <p @click="login" v-if="!userStore.userInfo.name">注册/登录</p>
+                <el-dropdown v-else>
+                    <span class="el-dropdown-link">
+                        {{ userStore.userInfo.name }}
+                        <el-icon class="el-icon--right">
+                            <arrow-down />
+                        </el-icon>
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item>实名认证</el-dropdown-item>
+                            <el-dropdown-item>挂号名单</el-dropdown-item>
+                            <el-dropdown-item>就诊人管理</el-dropdown-item>
+                            <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
     </div>
@@ -30,6 +46,9 @@ const goHome = () => {
 }
 const login = () => {
     userStore.visiable = true;
+}
+const logout = () => {
+
 }
 </script>
 
@@ -80,6 +99,13 @@ const login = () => {
 
             p {
                 cursor: pointer;
+            }
+
+            .example-showcase .el-dropdown-link {
+                cursor: pointer;
+                color: var(--el-color-primary);
+                display: flex;
+                align-items: center;
             }
         }
     }

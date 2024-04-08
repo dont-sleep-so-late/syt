@@ -1,12 +1,20 @@
 import { defineStore } from "pinia";
 
 import { reqCode } from "@/api/hospital";
-
+import type {
+  UserInfo,
+  UserLoginResponseData,
+  loginData,
+} from "@/api/user/type";
+import { reqUserLogin } from "@/api/user";
+import type { UserState } from "./interface";
+import { GET_TOKEN, SET_TOKEN } from "@/utils/user";
 const useUserStore = defineStore("User", {
-  state: () => {
+  state: (): UserState => {
     return {
       visiable: false,
       code: "",
+      userInfo: (JSON.parse(GET_TOKEN() as string) || {}) as UserInfo,
     };
   },
   actions: {
@@ -14,6 +22,16 @@ const useUserStore = defineStore("User", {
       var result: any = await reqCode(phone);
       if (result.code == 200) {
         this.code = result.data;
+        return "ok";
+      } else {
+        return Promise.reject(new Error(result.message));
+      }
+    },
+    async userLogin(LoginData: loginData) {
+      var result: UserLoginResponseData = await reqUserLogin(LoginData);
+      if (result.code === 200) {
+        this.userInfo = result.data;
+        SET_TOKEN(JSON.stringify(this.userInfo));
         return "ok";
       } else {
         return Promise.reject(new Error(result.message));
