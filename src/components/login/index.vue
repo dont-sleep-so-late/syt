@@ -1,20 +1,20 @@
 <template>
     <div class="login_container">
-        <el-dialog v-model="userStore.visiable" width="960">
+        <el-dialog v-model="userStore.visiable" width="960" @close="close">
             <el-row>
                 <!-- 左侧 -->
                 <el-col :span="12">
                     <div class="login">
                         <div v-show="scene == 0">
                             <el-form :model="loginData" :rules="rules" ref="ruleFormRef">
-                                <el-form-item>
+                                <el-form-item prop="phone">
                                     <h3>手机号码</h3>
-                                    <el-input :prefix-icon="User" prop="phone" placeholder="请输入手机号码"
+                                    <el-input :prefix-icon="User" placeholder="请输入手机号码"
                                         v-model="loginData.phone"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item prop="code">
                                     <h3>验证码</h3>
-                                    <el-input :prefix-icon="Lock" prop="code" placeholder="请输入验证码"
+                                    <el-input :prefix-icon="Lock" placeholder="请输入验证码"
                                         v-model="loginData.code"></el-input>
                                 </el-form-item>
                                 <el-form-item>
@@ -113,7 +113,7 @@ import useUserStore from '@/store/modules/user'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { ref, reactive, computed } from 'vue';
-import { loginData } from '@/api/user/type'
+import { LoginData } from '@/api/user/type'
 //引入倒计时组件
 import CountDown from '@/components/countdown/index.vue'
 var userStore = useUserStore()
@@ -123,11 +123,11 @@ var flag = ref<boolean>(false)
 //登录场景 0代表验证码登录 1代表微信扫码登录
 var scene = ref<number>(0)
 //收集表单数据--手机号码
-var loginData = reactive<loginData>({
+var loginData = reactive<LoginData>({
     phone: '',
     code: ''
 })
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 
 //判断手机号
 var isPhone = computed(() => {
@@ -153,6 +153,7 @@ const getCode = () => {
 }
 //登录
 const login = async () => {
+    await ruleFormRef.value.validate()
     //发起登录请求
     //登录请求成功:顶部组件需要展示用户名字、对话框关闭
     //登录请求失败:弹出对应登录失败的错误信息
@@ -170,26 +171,54 @@ const login = async () => {
     })
 }
 const getFlag = (value: boolean) => {
-    console.log(value);
-
     flag.value = value
 }
 const wxLogin = (value: number) => {
     scene.value = value
 }
-
-const rules = reactive<FormRules<loginData>>({
-    phone: [
-        { required: true, message: '请输入正确的手机号', trigger: 'change' },
-    ],
-    code: [
-        {
-            required: true,
-            message: '请输入验证码',
-            trigger: 'change',
-        },
-    ],
+//自定义校验手机
+const validatorPhone = (rule: any, value: any, callback: any) => {
+    //rule:即为表单校验规则对象
+    //value:即为当前文本的内容
+    //callBack:回调函数
+    const reg = /^(13[0-9]|14|15[0-35-9]|16|17[0-8]|18[0-9]|19)\d{8}$/
+    if (reg.test(value)) {
+        callback()
+    }
+    else {
+        callback(new Error('请输入正确的手机号码格式'))
+    }
+}
+const validatorCode = (rule: any, value: any, callback: any) => {
+    //rule:即为表单校验规则对象
+    //value:即为当前文本的内容
+    //callBack:回调函数
+    if (/^\d{6}$/.test(value)) {
+        callback()
+    }
+    else {
+        callback(new Error('请输入正确的验证码'))
+    }
+}
+const rules = reactive<FormRules<LoginData>>({
+    // phone: [
+    //     { required: true, message: '请输入正确的手机号', trigger: 'blur', min: 11, max: 11 },
+    // ],
+    // code: [
+    //     {
+    //         required: true,
+    //         message: '请输入正确的验证码',
+    //         trigger: 'blur',
+    //     },
+    // ],
+    phone: [{ trigger: 'blur', validator: validatorPhone }],
+    code: [{ trigger: 'blur', validator: validatorCode }]
 })
+
+//对话框关闭回调
+const close = () => {
+    Object.assign(loginData, { phone: '', code: '' })
+}
 </script>
 
 <style lang='scss' scoped>

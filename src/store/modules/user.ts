@@ -4,11 +4,11 @@ import { reqCode } from "@/api/hospital";
 import type {
   UserInfo,
   UserLoginResponseData,
-  loginData,
+  LoginData,
 } from "@/api/user/type";
 import { reqUserLogin } from "@/api/user";
 import type { UserState } from "./interface";
-import { GET_TOKEN, SET_TOKEN } from "@/utils/user";
+import { GET_TOKEN, REMOVE_TOKEN, SET_TOKEN } from "@/utils/user";
 const useUserStore = defineStore("User", {
   state: (): UserState => {
     return {
@@ -27,7 +27,7 @@ const useUserStore = defineStore("User", {
         return Promise.reject(new Error(result.message));
       }
     },
-    async userLogin(LoginData: loginData) {
+    async userLogin(LoginData: LoginData) {
       var result: UserLoginResponseData = await reqUserLogin(LoginData);
       if (result.code === 200) {
         this.userInfo = result.data;
@@ -36,6 +36,10 @@ const useUserStore = defineStore("User", {
       } else {
         return Promise.reject(new Error(result.message));
       }
+    },
+    userLogout() {
+      this.userInfo = { name: "", token: "" };
+      REMOVE_TOKEN();
     },
   },
   getters: {},

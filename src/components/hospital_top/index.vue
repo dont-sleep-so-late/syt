@@ -48,7 +48,8 @@ const login = () => {
     userStore.visiable = true;
 }
 const logout = () => {
-
+    userStore.userLogout()
+    router.replace('/home')
 }
 </script>
 
