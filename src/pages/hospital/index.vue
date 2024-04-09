@@ -39,8 +39,8 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(() => {
-    detailStore.getHospital(route.query.hoscode);
-    detailStore.getDepartment(route.query.hoscode);
+    detailStore.getHospital(route.query.hoscode as string);
+    detailStore.getDepartment(route.query.hoscode as string);
 })
 
 

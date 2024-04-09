@@ -19,3 +19,13 @@ export interface UserLoginResponseData extends ResponseData {
 }
 
 //
+export interface UserCodeResponseData extends ResponseData {
+  data: UserCode;
+}
+
+interface UserCode {
+  redirectUri: string;
+  appid: string;
+  scope: string;
+  state: string;
+}

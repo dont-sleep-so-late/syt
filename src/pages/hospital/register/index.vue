@@ -52,19 +52,18 @@
         <div class="department">
             <div class="leftNav">
                 <ul>
-                    <li @click="changeDepartment(index)" :class="{ active: index == currentIndex }"
-                        v-for="(department, index) in hospitalStore.department" :key="department.depcode">{{
-                    department.depname
-                }}</li>
+                    <li v-for="(item, index)  in hospitalStore.department " :key="index"
+                        @click="changeDepartment(index)" :class="{ active: index == currentIndex }">{{
+                            item.depname
+                        }}</li>
                 </ul>
             </div>
             <div class="rightContent">
-                <div class="showDepartment" v-for="(department, index) in hospitalStore.department"
-                    :key="department.depcode">
+                <div class="showDepartment" v-for="department in hospitalStore.department" :key="department.depcode">
                     <h1 class="cur">{{ department.depname }}</h1>
                     <ul>
                         <li @click="toDepartment()" class="departmentContent"
-                            v-for="(departmentChild, index) in department.children" :key="departmentChild.depcode">
+                            v-for="departmentChild, in department.children" :key="departmentChild.depcode">
                             {{ departmentChild.depname }}
                         </li>
                     </ul>
@@ -82,9 +81,9 @@ import { ref } from 'vue';
 var userStore = useUserStore()
 var hospitalStore = useDetailStore()
 
-var currentIndex = ref<number>(0)
+var currentIndex = ref<any>(0)
 
-const changeDepartment = (index: number) => {
+const changeDepartment = (index: any) => {
     currentIndex.value = index;
 
     let allH1 = document.querySelectorAll('.cur')

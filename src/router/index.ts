@@ -39,6 +39,10 @@ export default createRouter({
         },
       ],
     },
+    {
+      path: "/wxlogin",
+      component: () => import("@/pages/wxlogin/index.vue"),
+    },
   ],
   //滚动行为
   scrollBehavior() {

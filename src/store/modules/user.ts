@@ -41,6 +41,19 @@ const useUserStore = defineStore("User", {
       this.userInfo = { name: "", token: "" };
       REMOVE_TOKEN();
     },
+    //查询微信扫码结果
+    queryState() {
+      //开启定时器每隔一段时间问:本地村是都拥有用户信息
+      let timer = setInterval((): any => {
+        //本地存储已有有数据:扫码成功
+        if (GET_TOKEN()) {
+          //关闭对话框
+          this.visiable = false;
+          this.userInfo = JSON.parse(GET_TOKEN() as string);
+          clearInterval(timer);
+        }
+      }, 1000);
+    },
   },
   getters: {},
 });

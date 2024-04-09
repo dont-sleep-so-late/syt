@@ -1,6 +1,6 @@
 <template>
     <div class="login_container">
-        <el-dialog v-model="userStore.visiable" width="960" @close="close">
+        <el-dialog v-model="userStore.visiable" draggable :show-close="false" width="960" @close="close">
             <el-row>
                 <!-- 左侧 -->
                 <el-col :span="12">
@@ -18,14 +18,14 @@
                                         v-model="loginData.code"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button style="width: 50%;" size="default" @click="getCode"
+                                    <el-button style="width: 50%;margin:10px 0" size="default" @click="getCode"
                                         :disabled="!isPhone || flag">
                                         <span v-if="!flag">获取验证码</span>
                                         <CountDown v-else @getFlag="getFlag" :flag="flag" />
                                     </el-button>
                                 </el-form-item>
                             </el-form>
-                            <div class="bottom">
+                            <div class="wxbottom">
                                 <el-button style="width: 100%;" type="primary" size="default" @click="login"
                                     :disabled="!isPhone || loginData.code.length < 6 ? true : false">用户登录</el-button>
                                 <div class="wxLogin" @click="wxLogin(1)">
@@ -44,30 +44,17 @@
                         </div>
                         <div v-show="scene == 1">
                             <div class="wxCode">
-                                <h2>微信登录</h2>
-                                <img src="../../assets/code_app.png" alt="">
-                                <p>使用微信扫一扫登录</p>
-                                <p> “尚硅谷”</p>
+                                <div id="login_container"></div>
                             </div>
-                            <div class="bottom">
-                                <div class="wxLogin" @click="wxLogin(0)">
-                                    <svg t="1711853021826" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                                        xmlns="http://www.w3.org/32/svg" p-id="8932" width="32" height="32"
-                                        data-spm-anchor-id="a313x.search_index.0.i27.59253a814igsQx">
-                                        <path d="M512 512m-512 0a512 512 0 1 0 1024 0 512 512 0 1 0-1024 0Z"
-                                            fill="#1296db" p-id="8933"
-                                            data-spm-anchor-id="a313x.search_index.0.i25.59253a814igsQx" class="">
-                                        </path>
-                                        <path
-                                            d="M698.1888 153.6H325.8112A69.7088 69.7088 0 0 0 256 223.2064V826.368A69.7088 69.7088 0 0 0 325.8112 896h372.3776A69.7088 69.7088 0 0 0 768 826.3936V223.232A69.7088 69.7088 0 0 0 698.1888 153.6zM716.8 821.9392a22.912 22.912 0 0 1-22.7584 22.8608H329.984a22.7072 22.7072 0 0 1-22.7584-22.8608V227.6608A22.784 22.784 0 0 1 329.9584 204.8h68.2752c0.6144 23.1936 19.456 41.728 42.5472 41.8304h142.208A42.88 42.88 0 0 0 625.5616 204.8h68.2496a22.7072 22.7072 0 0 1 22.784 22.8608L716.8 821.9392z"
-                                            fill="#ffffff" p-id="8934"
-                                            data-spm-anchor-id="a313x.search_index.0.i24.59253a814igsQx" class="">
-                                        </path>
-                                        <path d="M409.6 742.4h204.8v51.2h-204.8z" fill="#ffffff" p-id="8935"
-                                            data-spm-anchor-id="a313x.search_index.0.i28.59253a814igsQx" class="">
-                                        </path>
-                                    </svg>
+                            <div class="phonebottom">
+                                <div class="phoneLogin" @click="wxLogin(0)">
                                     <p>手机短信验证码登录</p>
+                                    <svg t="1712654474708" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" p-id="4387" width="32" height="32">
+                                        <path
+                                            d="M341.333333 896H256V128h512v768H341.333333z m0-85.333333h341.333334V213.333333H341.333333v597.333334z m85.333334-42.666667v-85.333333h170.666666v85.333333h-170.666666z"
+                                            fill="#444444" p-id="4388"></path>
+                                    </svg>
                                 </div>
                             </div>
                         </div>
@@ -111,11 +98,12 @@
 <script lang='ts' setup>
 import useUserStore from '@/store/modules/user'
 import { User, Lock } from '@element-plus/icons-vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { ref, reactive, computed } from 'vue';
-import { LoginData } from '@/api/user/type'
+import { ElMessage, type FormRules } from 'element-plus';
+import { ref, reactive, computed, watch } from 'vue';
+import { LoginData, UserCodeResponseData } from '@/api/user/type'
 //引入倒计时组件
 import CountDown from '@/components/countdown/index.vue'
+import { reqWxLogin } from '@/api/user';
 var userStore = useUserStore()
 
 var flag = ref<boolean>(false)
@@ -173,11 +161,25 @@ const login = async () => {
 const getFlag = (value: boolean) => {
     flag.value = value
 }
-const wxLogin = (value: number) => {
+const wxLogin = async (value: number) => {
     scene.value = value
+    let redirect_URL = encodeURIComponent(window.location.origin + "/wxlogin")
+    let result: UserCodeResponseData = await reqWxLogin(redirect_URL)
+
+    //@ts-ignore
+    var obj = new WxLogin({
+        self_redirect: true,
+        id: "login_container",
+        appid: result.data.appid,
+        scope: "snsapi_login",
+        redirect_uri: result.data.redirectUri,
+        state: result.data.state,
+        style: "black",
+        href: ""
+    });
 }
 //自定义校验手机
-const validatorPhone = (rule: any, value: any, callback: any) => {
+const validatorPhone = (_rule: any, value: any, callback: any) => {
     //rule:即为表单校验规则对象
     //value:即为当前文本的内容
     //callBack:回调函数
@@ -189,7 +191,7 @@ const validatorPhone = (rule: any, value: any, callback: any) => {
         callback(new Error('请输入正确的手机号码格式'))
     }
 }
-const validatorCode = (rule: any, value: any, callback: any) => {
+const validatorCode = (_rule: any, value: any, callback: any) => {
     //rule:即为表单校验规则对象
     //value:即为当前文本的内容
     //callBack:回调函数
@@ -219,6 +221,12 @@ const rules = reactive<FormRules<LoginData>>({
 const close = () => {
     Object.assign(loginData, { phone: '', code: '' })
 }
+//监听场景的数据
+watch(() => scene.value, (val: number) => {
+    if (val === 1) {
+        userStore.queryState()
+    }
+})
 </script>
 
 <style lang='scss' scoped>
@@ -228,42 +236,75 @@ const close = () => {
         background-color: #f7fbff;
     }
 
+    :deep(.el-dialog) {
+        // 取消阴影和背景色
+        background: rgba(0, 0, 0, 0);
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0);
+    }
+
     .login {
         margin: 30px 30px;
-        padding: 10px 50px;
-        height: 450px;
+        padding: 30px 50px;
+        height: 500px;
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 0 10px 1px #ddf5ff;
 
-        .wxCode {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-
-            img {
-                border: 1px solid rgb(206, 206, 206);
-                padding: 10px 10px;
-            }
+        .el-form {
+            margin-top: 30px
         }
 
-        .bottom {
+        .wxCode {
+            min-height: 400px;
+        }
+
+        .wxbottom {
             display: flex;
             flex-direction: column;
             align-items: center;
 
 
             .wxLogin {
-                margin-top: 20px;
                 display: flex;
                 align-items: center;
                 flex-direction: column;
+                margin-top: 100px;
 
                 &:hover {
                     cursor: pointer;
                     color: rgb(156, 156, 156);
 
+                    svg {
+                        transition: .5s;
+                        transform: rotate(720deg);
+                    }
+                }
+            }
+
+
+        }
+
+        .phonebottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .phoneLogin {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                margin-top: -10px;
+
+                &:hover {
+                    cursor: pointer;
+                    color: rgb(156, 156, 156);
+
+                    svg {
+                        transition: .5s;
+                        transform: rotate(720deg);
+                    }
                 }
             }
         }
@@ -296,7 +337,7 @@ const close = () => {
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            margin-top: 30px;
+            margin-top: 50px;
         }
     }
 }
