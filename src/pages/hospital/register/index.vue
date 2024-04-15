@@ -52,9 +52,9 @@
         <div class="department">
             <div class="leftNav">
                 <ul>
-                    <li v-for="(item, index)  in hospitalStore.department " :key="index"
+                    <li v-for="(department, index) in hospitalStore.department" :key="index"
                         @click="changeDepartment(index)" :class="{ active: index == currentIndex }">{{
-                            item.depname
+                            department.depname
                         }}</li>
                 </ul>
             </div>
@@ -62,8 +62,9 @@
                 <div class="showDepartment" v-for="department in hospitalStore.department" :key="department.depcode">
                     <h1 class="cur">{{ department.depname }}</h1>
                     <ul>
-                        <li @click="toDepartment()" class="departmentContent"
-                            v-for="departmentChild, in department.children" :key="departmentChild.depcode">
+                        <li v-for="departmentChild in department.children"
+                            @click="toDepartment(departmentChild.depcode)" class="departmentContent"
+                            :key="departmentChild.depcode">
                             {{ departmentChild.depname }}
                         </li>
                     </ul>
@@ -77,11 +78,17 @@
 import useDetailStore from '@/store/modules/hospitalDetail'
 import useUserStore from '@/store/modules/user'
 import { ref } from 'vue';
-
+import { useRoute, useRouter } from 'vue-router';
+//引入医院详情仓库的数据
 var userStore = useUserStore()
 var hospitalStore = useDetailStore()
-
+//控制科室高亮的响应式数据
 var currentIndex = ref<any>(0)
+
+//获取路由对象
+var route = useRoute()
+//获取路由器
+var router = useRouter()
 
 const changeDepartment = (index: any) => {
     currentIndex.value = index;
@@ -93,8 +100,17 @@ const changeDepartment = (index: any) => {
     })
 
 }
-const toDepartment = () => {
-    userStore.visiable = true;
+//点击科室按钮回调
+const toDepartment = (depcode: number) => {
+    // userStore.visiable = true;
+    router.push({
+        path: '/hospital/register_step_1',
+        query: {
+            hoscode: route.query.hoscode,
+            depcode: depcode
+        }
+    })
+
 }
 </script>
 

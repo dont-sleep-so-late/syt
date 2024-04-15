@@ -70,3 +70,35 @@ export interface PhoneData {
   data: string;
   ok: boolean;
 }
+
+export interface HospitalWorkResponseData {
+  code: number;
+  message: string;
+  data: HospitalWorkData;
+  ok: boolean;
+}
+
+export interface HospitalWorkData {
+  total: number;
+  bookingScheduleList: BookingScheduleList[];
+  baseMap: BaseMap;
+}
+
+interface BaseMap {
+  workDateString: string;
+  releaseTime: string;
+  bigname: string;
+  stopTime: string;
+  depname: string;
+  hosname: string;
+}
+
+interface BookingScheduleList {
+  workDate: string;
+  workDateMd: string;
+  dayOfWeek: string;
+  docCount: number;
+  reservedNumber: number;
+  availableNumber: number;
+  status: number;
+}

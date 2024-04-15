@@ -4,6 +4,7 @@ import type {
   HospitalResponseData,
   HospitalDepartmentResponseData,
   PhoneData,
+  HospitalWorkResponseData,
 } from "./type";
 
 enum API {
@@ -13,7 +14,8 @@ enum API {
   HOSPITALDEPARMENT_URL = "/hosp/hospital/department/",
   //获取验证码接口
   GETUSERCOD_URL = "/sms/send/",
-
+  //获取挂号信息
+  HOSPITALWORK_URL = "/hosp/hospital/auth/getBookingScheduleRule/",
 }
 //获取医院的数据
 export const resHospitalDetail = (hoscode: string) =>
@@ -26,3 +28,14 @@ export const resDepartment = (hoscode: string) =>
 //通过搜索关键字获取医院的数据
 export const reqCode = (phone: string) =>
   request.get<any, PhoneData>(API.GETUSERCOD_URL + phone);
+
+//获取预约挂号数据
+export const reqHospitalWork = (
+  page: number,
+  limit: number,
+  hoscode: string,
+  depcode: string
+) =>
+  request.get<any, HospitalWorkResponseData>(
+    API.HOSPITALWORK_URL + `${page} / ${limit} / ${hoscode} / ${depcode}`
+  );
