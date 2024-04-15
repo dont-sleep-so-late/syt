@@ -29,7 +29,6 @@ request.interceptors.request.use(
     if (userStore.userInfo.token) {
       config.headers.token = userStore.userInfo.token;
     }
-
     return config;
   },
   (error) => {

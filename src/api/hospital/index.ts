@@ -37,5 +37,5 @@ export const reqHospitalWork = (
   depcode: string
 ) =>
   request.get<any, HospitalWorkResponseData>(
-    API.HOSPITALWORK_URL + `${page} / ${limit} / ${hoscode} / ${depcode}`
+    API.HOSPITALWORK_URL + `${page}/${limit}/${hoscode}/${depcode}`
   );

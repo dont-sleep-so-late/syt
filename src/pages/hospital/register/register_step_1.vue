@@ -1,7 +1,7 @@
 <template>
     <div class="warp">
         <div class="top">
-            <span class="hosname">北京人民医院</span>
+            <span class="hosname">{{ workData.baseMap?.hosname }}</span>
             <span class="line"></span>
             <span>专科</span>
             <span class="dot">·</span>
@@ -25,12 +25,14 @@
 import { onMounted, ref } from 'vue'
 import { reqHospitalWork } from '@/api/hospital';
 import { useRoute, useRouter } from 'vue-router';
-import { HospitalWorkResponseData } from '@/api/hospital/type';
+import { HospitalWorkData, HospitalWorkResponseData } from '@/api/hospital/type';
 
 //获取路由对象
 var route = useRoute()
 //获取路由器
-var router = useRouter()
+// var router = useRouter()
+
+var workData = ref<HospitalWorkData>()
 
 var pagenum = ref<number>(0)
 var pagesize = ref<number>(10)
@@ -41,7 +43,11 @@ onMounted(() => {
 
 const getWorkData = async () => {
     let result: HospitalWorkResponseData = await reqHospitalWork(pagenum.value, pagesize.value, route.query.hoscode as string, route.query.depcode as string)
+    if (result.code == 200) {
+        workData.value = result.data
+    }
     console.log(result);
+
 
 }
 </script>
